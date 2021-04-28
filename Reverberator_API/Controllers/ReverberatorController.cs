@@ -18,7 +18,11 @@ namespace Reverberator_API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        /// <summary>
+        /// A method that displays for health checks
+        /// </summary>
+        /// <returns>Hello World</returns>
+        [HttpGet("helloworld")]
         public string Get()
         {
             return "Hello World";
