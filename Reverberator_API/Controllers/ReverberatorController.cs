@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Reverberator_API.Controllers
 {
@@ -13,8 +14,6 @@ namespace Reverberator_API.Controllers
     public class ReverberatorController : ControllerBase
     {
         private readonly ILogger<ReverberatorController> _logger;
-
-        static readonly HttpClient client = new HttpClient();
 
         public ReverberatorController(ILogger<ReverberatorController> logger)
         {
@@ -36,24 +35,39 @@ namespace Reverberator_API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("reverbtest")]
-        public string QueryReverb()
+        public async Task<string> QueryReverb()
         {
-            string htmlString;
+            var htmlString = "";
+            var reverbURI = "https://reverb.com/item/40259382-ibanez-b200-banjo";
+
+            HttpClientHandler handler = new HttpClientHandler();
+            handler.UseDefaultCredentials = true;
+
+            HttpClient client = new HttpClient(handler);
+
             try
             {
-                HttpResponseMessage response = await client.GetAsync("http://www.contoso.com/");
-                response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
-                // Above three lines can be replaced with new helper method below
-                // string responseBody = await client.GetStringAsync(uri);
-
+                using (var requestMessage =
+                new HttpRequestMessage(HttpMethod.Get, reverbURI))
+                {
+                    requestMessage.Headers.Authorization =
+                    new AuthenticationHeaderValue("NoAuth");
+                    var response = await client.SendAsync(requestMessage);
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    htmlString = responseBody;
+                }
+                //HttpResponseMessage response = await client.GetAsync(reverbURI);
+                //response.EnsureSuccessStatusCode();
+                //string responseBody = await response.Content.ReadAsStringAsync();
+                //htmlString = requestMessage;
             }
             catch (HttpRequestException e)
             {
                 Console.WriteLine("\nException Caught!");
                 Console.WriteLine("Message :{0} ", e.Message);
             }
-            return responseBody;
+
+            return htmlString;
         }
     }
 }
