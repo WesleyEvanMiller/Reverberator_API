@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using RestSharp;
+using PuppeteerSharp;
 
 namespace Reverberator_API.Controllers
 {
@@ -37,29 +39,36 @@ namespace Reverberator_API.Controllers
         [HttpGet("reverbtest")]
         public async Task<string> QueryReverb()
         {
-            var htmlString = "";
-            var reverbURI = "https://reverb.com/item/40259382-ibanez-b200-banjo";
-
-            HttpClientHandler handler = new HttpClientHandler();
-            handler.UseDefaultCredentials = true;
-
-            HttpClient client = new HttpClient(handler);
+            string fullUrl = "https://reverb.com/marketplace?query=Silver%20Sky&product_type=electric-guitars&make=paul-reed-smith&condition=used&sort=published_at%7Cdesc";
 
             try
             {
-                using (var requestMessage =
-                new HttpRequestMessage(HttpMethod.Get, reverbURI))
+                
+
+                List<string> programmerLinks = new List<string>();
+
+                var options = new LaunchOptions()
                 {
-                    requestMessage.Headers.Authorization =
-                    new AuthenticationHeaderValue("NoAuth");
-                    var response = await client.SendAsync(requestMessage);
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    htmlString = responseBody;
+                    Headless = true,
+                    ExecutablePath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+                };
+
+                using (var browser = await Puppeteer.LaunchAsync(options))
+                using (var page = await browser.NewPageAsync())
+                {
+                    await page.GoToAsync(fullUrl);
+                    await page.WaitForSelectorAsync("body > main > section > div:nth-child(2) > div > div > div.faceted-grid > div.faceted-grid__inner > div.faceted-grid__main > ul > li:nth-child(1) > div > a");
+
+                    var jsSelectAllAnchors = @"Array.from(document.querySelectorAll('a.grid-card__inner')).map(a => a.href);";
+                    var urls = await page.EvaluateExpressionAsync<string[]>(jsSelectAllAnchors);
+
+                    foreach (string url in urls)
+                    {
+                        Console.WriteLine($"Url: {url}");
+                    }
+
+                    return "hi";
                 }
-                //HttpResponseMessage response = await client.GetAsync(reverbURI);
-                //response.EnsureSuccessStatusCode();
-                //string responseBody = await response.Content.ReadAsStringAsync();
-                //htmlString = requestMessage;
             }
             catch (HttpRequestException e)
             {
@@ -67,7 +76,7 @@ namespace Reverberator_API.Controllers
                 Console.WriteLine("Message :{0} ", e.Message);
             }
 
-            return htmlString;
+            return "hi";
         }
     }
 }
