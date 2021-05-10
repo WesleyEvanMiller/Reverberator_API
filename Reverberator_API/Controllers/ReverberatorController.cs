@@ -59,7 +59,7 @@ namespace Reverberator_API.Controllers
                     await page.GoToAsync(fullUrl);
                     await page.WaitForSelectorAsync("body > main > section > div:nth-child(2) > div > div > div.faceted-grid > div.faceted-grid__inner > div.faceted-grid__main > ul > li:nth-child(1) > div > a");
 
-                    var jsSelectAllAnchors = @"Array.from(document.querySelectorAll('a.grid-card__inner')).map(a => a.href);";
+                    var jsSelectAllAnchors = @"Array.from(document.querySelectorAll('body > main > section > div:nth-child(2) > div > div > div.faceted-grid > div.faceted-grid__inner > div.faceted-grid__main > ul > li > div > a')).map(a => a.href);";
                     var urls = await page.EvaluateExpressionAsync<string[]>(jsSelectAllAnchors);
 
                     foreach (string url in urls)
