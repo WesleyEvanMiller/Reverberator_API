@@ -39,14 +39,10 @@ namespace Reverberator_API.Controllers
         [HttpGet("reverbtest")]
         public async Task<string> QueryReverb()
         {
-            string fullUrl = "https://reverb.com/marketplace?query=Silver%20Sky&product_type=electric-guitars&make=paul-reed-smith&condition=used&sort=published_at%7Cdesc";
+            string fullUrl = "https://reverb.com/marketplace?query=Fender%20%2765%20Deluxe%20Reverb%20Reissue&sort=published_at%7Cdesc";
 
             try
             {
-                
-
-                List<string> programmerLinks = new List<string>();
-
                 var options = new LaunchOptions()
                 {
                     Headless = true,
