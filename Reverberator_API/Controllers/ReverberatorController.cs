@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using RestSharp;
 using PuppeteerSharp;
+using Reverberator_API.Databases;
 
 namespace Reverberator_API.Controllers
 {
@@ -29,6 +30,8 @@ namespace Reverberator_API.Controllers
         [HttpGet("helloworld")]
         public string Get()
         {
+            var test = new Search_URL();
+            test.InsertURL();
             return "Hello World";
         }
 

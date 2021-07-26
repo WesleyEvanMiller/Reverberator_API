@@ -28,7 +28,10 @@ namespace Reverberator_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            /*services.AddEntityFramework()
+            .AddSqlite()
+            .AddDbContext<MyContext>(
+                options => { options.UseSqlite($"Data Source={_appEnv.ApplicationBasePath}/Reverberator.db"); });*/
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
