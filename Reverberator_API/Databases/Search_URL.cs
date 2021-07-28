@@ -17,9 +17,12 @@ namespace Reverberator_API.Databases
 		{
 
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            builder.IntegratedSecurity = true;
-            builder.DataSource = "localhost";
-            builder.InitialCatalog = "Reverberator.db";
+            builder.IntegratedSecurity = false;
+            builder.DataSource = "127.0.0.1";
+            builder.InitialCatalog = "Reverberator";
+            builder.TrustServerCertificate = true;
+            builder.UserID = "conno";
+            builder.Password = "Frontflip2";
             var connection = new SqlConnection(builder.ConnectionString);
             
             connection.Open();
