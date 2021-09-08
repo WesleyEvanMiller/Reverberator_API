@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using RestSharp;
 using PuppeteerSharp;
 using Reverberator_API.Databases;
+using Reverberator_API.Models;
 
 namespace Reverberator_API.Controllers
 {
@@ -31,7 +32,10 @@ namespace Reverberator_API.Controllers
         public string Get()
         {
             var test = new Search_URL();
-            test.InsertURL();
+            var Connor = new Searches();
+            Connor.Email = "connorhenderson20@gmail.com";
+            Connor.URL = "https://reverb.com/marketplace?product_type=electric-guitars&query=stratocaster";
+            test.InsertURL(Connor);
             return "Hello World";
         }
 

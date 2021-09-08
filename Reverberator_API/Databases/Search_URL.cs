@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Data.SqlClient;
+using Reverberator_API.Models;
 
 namespace Reverberator_API.Databases
 {
@@ -13,7 +14,7 @@ namespace Reverberator_API.Databases
 
 		}
 
-		public void InsertURL()
+		public void InsertURL(Searches Connor)
 		{
 
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
@@ -28,12 +29,13 @@ namespace Reverberator_API.Databases
             connection.Open();
             
             var command = connection.CreateCommand();
+            command.Parameters.AddWithValue("@Email", Connor.Email);
+            command.Parameters.AddWithValue("@URL", Connor.URL);
             command.CommandText =
             @"
             INSERT INTO Search_URLs (Email, URL)
-            VALUES ('Connor', 'weee');
+            VALUES ('@Email', '@URL');
             ";
-
             var reader = command.ExecuteReader();
                 
             while (reader.Read())
